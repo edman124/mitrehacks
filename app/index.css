@@ -3,13 +3,25 @@ body {
 }
 #gameboard {
   display: flex;
-  min-height: 100%;
+  min-height: 92%;
   flex-wrap: wrap;
 }
 .grid_box {
-  width: 33.3333333%;
+  min-width: 33.3333333%;
   min-height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#playerboard {
+  display: flex;
+  min-height: 8%;
+}
+.player {
+  min-width: 16.66%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid black;
 }

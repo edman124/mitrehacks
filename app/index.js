@@ -27,11 +27,39 @@ class Gameboard extends React.Component {
     }
 }
 
+class Playerboard extends React.Component {
+    render() {
+        return (
+            <div id="playerboard">
+                <div className="player">
+                    Player
+                </div>
+                <div className="player">
+                    Player
+                </div>
+                <div className="player">
+                    Player
+                </div>
+                <div className="player">
+                    Player
+                </div>
+                <div className="player">
+                    Player
+                </div>
+                <div className="player">
+                    Player
+                </div>
+            </div>
+        )
+    }
+}
+
 class App extends React.Component {
     render() {
         return (
             <div id="container">
                 <Gameboard></Gameboard>
+                <Playerboard></Playerboard>
             </div>
         )
     }
