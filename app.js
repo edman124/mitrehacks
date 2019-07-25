@@ -38,9 +38,19 @@ io.on('connection',function(socket){                  // called when a new socke
         
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
+        var uuid = gen_uuid();
+        joined_users.push(uuid);
+        socket.emit('server_msg', uuid); // server-side emit just to this client
+
         
-        // socket.emit('server_msg', button_count++); // server-side emit just to this client
-        io.emit('server_msg', button_count++);        // server server-side emit to all clients
+        //io.emit('server_msg', button_count++);        // server server-side emit to all clients
     })
 
 })
+
+function gen_uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
