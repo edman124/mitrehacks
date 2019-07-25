@@ -12,19 +12,13 @@ server.listen(process.env.PORT || 8080);              // listen for incoming con
 
 // -------------- variables  -------------- //
 var game_state = {
-    user_data: {
-        id: "",
-        role: "",
-        current_data: ""
-    },
-    game_data: {
-        round: "",
-        user_data: []
-    }
+    round: "",
+    user_data: []
 }
 
-var joined_users = [];
+var joined_users = {};
 
+//avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
 // -------------- express getter -------------- //
 app.get('/', function (req, res, next) {
@@ -39,14 +33,28 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         var uuid = gen_uuid();
-        joined_users.push(uuid);
-        socket.emit('server_msg', uuid); // server-side emit just to this client
+        joined_users.uuid = 
+            {id: uuid, 
+            role: gen_status(), 
+            current_data: {avatar: "", twitter: "", netflix: "", awl: "", fb: "", figa: ""}
+        };
+        game_state.user_data.push(joined_users.uuid);
+        console.log(game_state);
+        socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
 
         
         //io.emit('server_msg', button_count++);        // server server-side emit to all clients
     })
 
 })
+
+function gen_status(){
+    var status = "villager";
+    if(Object.keys(joined_users).length === 0){
+        status = "catfish";
+    }
+    return status;
+}
 
 function gen_uuid() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
