@@ -12,6 +12,10 @@
                 p = document.getElementById('response');
                 p.innerHTML = response_str.id;
             });
+
+            socket.on('round_finished', function(response){
+                console.log(response);
+            });
         </script>
         
         <script type="text/javascript">

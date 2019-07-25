@@ -58,7 +58,7 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log("post move game state", game_state);
         console.log("check round finished", check_round_finished(game_state.round))
         if(check_round_finished(game_state.round)){
-            set_round();
+            round_finished();
         }
 
     })
@@ -83,9 +83,6 @@ function gen_uuid() {
 function check_round_finished(round){
 	var finished = true;
 	for (var userid in game_state.user_data){
-        console.log(game_state);
-        console.log(userid);
-        console.log(game_state.user_data[userid]);
 		if(!game_state.user_data[userid].hasOwnProperty(round)){
 			finished = false;
 		}
@@ -97,7 +94,7 @@ function check_round_finished(round){
 function round_finished(){
     prev_round.push(game_state.round);
     set_round();
-    io.emit()
+    io.emit('round_finished', game_state);
 }
 
 function set_round(){
