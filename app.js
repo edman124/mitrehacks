@@ -11,7 +11,19 @@ var io = require('socket.io').listen(server);         // attach socket.io to the
 server.listen(process.env.PORT || 8080);              // listen for incoming connections
 
 // -------------- variables  -------------- //
-var button_count = 0;
+var game_state = {
+    user_data: {
+        id: "",
+        role: "",
+        current_data: ""
+    },
+    game_data: {
+        round: "",
+        user_data: []
+    }
+}
+
+var joined_users = [];
 
 
 // -------------- express getter -------------- //
@@ -24,7 +36,7 @@ io.on('connection',function(socket){                  // called when a new socke
 
     console.log('new socket connection');
         
-    socket.on('client_evt', function(obj){            // server side socket callbacks for events
+    socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         
         // socket.emit('server_msg', button_count++); // server-side emit just to this client

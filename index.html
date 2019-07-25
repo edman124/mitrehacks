@@ -7,7 +7,7 @@
         <!--user defined script NOTE that it is just tagged script, not javascript-->
         <script>
             // create the socket object. you need to add a path when you run in subspace, like us
-            var socket = io.connect('https://user.tjhsst.edu/', { path: '/pckosek/socket.io/'  });
+            var socket = io.connect();
             socket.on('server_msg', function(response_str){    // create a client-side callback function
                 p = document.getElementById('response');
                 p.innerHTML = response_str;
