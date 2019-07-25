@@ -18,6 +18,8 @@ var game_state = {
 
 var joined_users = {};
 
+var prev_round = [];
+
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
 // -------------- express getter -------------- //
@@ -90,6 +92,12 @@ function check_round_finished(round){
 	}
 	return finished
 
+}
+
+function round_finished(){
+    prev_round.push(game_state.round);
+    set_round();
+    io.emit()
 }
 
 function set_round(){
