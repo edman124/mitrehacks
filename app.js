@@ -53,6 +53,7 @@ io.on('connection',function(socket){                  // called when a new socke
         game_state["user_data"][obj.id][obj.round] = obj.answer
         console.log("post move game state", game_state);
 
+
     })
 
 })
@@ -72,5 +73,13 @@ function gen_uuid() {
     });
 }
 
-function check_round(){
+function check_round_finished(round){
+	var finished = true;
+	for (var userid in game_state){
+		if !userid.hasOwnProperty(round){
+			finished = false;
+		}
+	}
+	return finished
+
 }
