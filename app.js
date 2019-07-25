@@ -18,7 +18,7 @@ var game_state = {
 
 var joined_users = {};
 
-var prev_round = [];
+var unused_rounds = ["avatar", "twitter", "netflix", "amazon", "fb", "instagram"];
 
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
@@ -58,7 +58,7 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log("post move game state", game_state);
         console.log("check round finished", check_round_finished(game_state.round))
         if(check_round_finished(game_state.round)){
-            round_finished();
+            set_round(game_state.round);
         }
 
     })
@@ -97,8 +97,16 @@ function round_finished(){
     io.emit('round_finished', game_state);
 }
 
-function set_round(){
-    if(game_state.round == ""){
-        game_state.round = "fb";
+function set_round(round){
+
+    
+    var len = unused_rounds.length;
+    var index = Math.floor(Math.random()*len);
+    var next_round = unused_rounds[index];
+    unused_rounds.splice(index, 1);
+    if(typeof round === "undefined"){
+    	round = next_round;
     }
+    game_state.round = round;
+    return next_round;
 }
