@@ -1,0 +1,21 @@
+{
+  "name": "catfish",
+  "version": "0.0.1",
+  "engines": {
+    "node": "8.0.0"
+  },
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "http": "latest",
+    "socket.io": "latest"
+  },
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "license": "MIT"
+}
