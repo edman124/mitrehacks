@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+#gameboard {
+  display: flex;
+  min-height: 100%;
+  flex-wrap: wrap;
+}
+.grid_box {
+  width: 33.3333333%;
+  min-height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
