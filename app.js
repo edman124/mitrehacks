@@ -32,6 +32,8 @@ io.on('connection',function(socket){                  // called when a new socke
         
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
+        console.log("Game Started");
+        set_round();
         var uuid = gen_uuid();
         joined_users.uuid = 
             {id: uuid, 
@@ -52,7 +54,10 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log("move input obj",obj);
         game_state["user_data"][obj.id][obj.round] = obj.answer
         console.log("post move game state", game_state);
-
+        console.log("check round finished", check_round_finished(game_state.round))
+        if(check_round_finished(game_state.round)){
+            set_round();
+        }
 
     })
 
@@ -75,11 +80,20 @@ function gen_uuid() {
 
 function check_round_finished(round){
 	var finished = true;
-	for (var userid in game_state){
-		if !userid.hasOwnProperty(round){
+	for (var userid in game_state.user_data){
+        console.log(game_state);
+        console.log(userid);
+        console.log(game_state.user_data[userid]);
+		if(!game_state.user_data[userid].hasOwnProperty(round)){
 			finished = false;
 		}
 	}
 	return finished
 
+}
+
+function set_round(){
+    if(game_state.round == ""){
+        game_state.round = "fb";
+    }
 }
