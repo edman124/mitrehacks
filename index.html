@@ -10,7 +10,7 @@
             var socket = io.connect();
             socket.on('server_msg', function(response_str){    // create a client-side callback function
                 p = document.getElementById('response');
-                p.innerHTML = response_str;
+                p.innerHTML = response_str.id;
             });
         </script>
         
@@ -18,10 +18,14 @@
             function doSocket() {                               
                 socket.emit('join_game', { keys : 'values'} ); // client-side socket emit
             }
+            function makeMove(){
+                socket.emit('move', {"id": document.getElementById('response').innerHTML, "round": "fb", "answer": "cool"});
+            }
         </script>
         
     </head>
     <body id="body">
         <button type="button" onclick="doSocket()">Press Me</button>
         <p id='response'></p>
+        <button type="button" onclick="makeMove()">Make Move</button>
     </body>

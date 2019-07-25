@@ -39,7 +39,8 @@ io.on('connection',function(socket){                  // called when a new socke
             //current_data: {avatar: "", twitter: "", netflix: "", awl: "", fb: "", figa: ""}
         };
         //game_state.user_data.push(joined_users.uuid);
-        console.log(game_state);
+        game_state["user_data"][uuid] = {};
+        console.log("Init Game State",game_state);
         socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
 
         
@@ -48,8 +49,9 @@ io.on('connection',function(socket){                  // called when a new socke
 
     socket.on('move', function(obj){
         //object is {id: _, round: _, answer: _}
-        game_state[user_data][obj.id][obj.round] = obj.answer
-        console.log(game_state);
+        console.log("move input obj",obj);
+        game_state["user_data"][obj.id][obj.round] = obj.answer
+        console.log("post move game state", game_state);
 
     })
 
@@ -71,5 +73,4 @@ function gen_uuid() {
 }
 
 function check_round(){
-
 }
