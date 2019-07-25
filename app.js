@@ -98,8 +98,6 @@ function round_finished(){
 }
 
 function set_round(round){
-
-    
     var len = unused_rounds.length;
     var index = Math.floor(Math.random()*len);
     var next_round = unused_rounds[index];
