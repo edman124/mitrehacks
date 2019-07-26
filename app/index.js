@@ -183,6 +183,61 @@ class App extends React.Component {
             id: result.user.id,
             game_state: result.gs
         });
+        this.selectModal();
+    }
+
+    selectModal(){
+        switch(this.state.game_state.round){
+            case "avatar": 
+                this.openProfileModal();
+                break;
+            case "twitter":
+                this.openTwitterModal();
+                break;
+            case "netflix":
+                this.openNetflixModal();
+                break;
+            case "amazon":
+                this.openAmazonModal();
+                break;
+            case "fb":
+                this.openFbModal();
+                break;
+            case "instagram":
+                this.openInstaModal();
+                break;
+            case "finished":
+                break;
+            case "vote":
+                break;
+        }
+    }
+
+    selectPlayer(id){
+        switch(id){
+            case "avatar": 
+                this.openProfileModal();
+                break;
+            case "twitter":
+                this.openTwitterModal();
+                break;
+            case "netflix":
+                this.openNetflixModal();
+                break;
+            case "amazon":
+                this.openAmazonModal();
+                break;
+            case "fb":
+                this.openFbModal();
+                break;
+            case "instagram":
+                this.openInstaModal();
+                break;
+            case "finished":
+                break;
+            case "vote":
+                break;
+        }
     }
 
     changeGameState(result){
@@ -190,6 +245,7 @@ class App extends React.Component {
             game_state: result
         });
         console.log("round finished");
+        this.selectModal();
     }
 
     submitAnswer(input){

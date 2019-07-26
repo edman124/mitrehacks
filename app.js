@@ -23,6 +23,8 @@ var unused_rounds = ["avatar", "twitter", "netflix", "amazon", "fb", "instagram"
 
 var game_started = false;
 
+var current_id = 1;
+
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
 // -------------- express getter -------------- //
@@ -39,7 +41,9 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log('client message!');
         console.log("Game Started");
         start_game(); // likes are retrieved here
-        var uuid = gen_uuid();
+        // var uuid = gen_uuid();
+        var uuid = current_id;
+        current_id++;
         joined_users.uuid = 
             {id: uuid, 
             role: gen_status()
@@ -53,7 +57,7 @@ io.on('connection',function(socket){                  // called when a new socke
         // push both the game_stat and uuid on server start 
         
         var result = {gs: game_state, user: joined_users.uuid};
-
+        
         socket.emit('game_started', result);        // server server-side emit to all clients
     })
 
@@ -93,9 +97,9 @@ function check_round_finished(round){
 			finished = false;
 		}
     }
-    if(Object.keys(joined_users).length < 7){
-        finished = false;
-    }
+    // if(Object.keys(joined_users).length < 7){
+    //     finished = false;
+    // }
 	return finished
 
 }
@@ -120,7 +124,8 @@ function start_game(){
 function set_round(round){
     var len = unused_rounds.length;
     if(game_state.round == "vote"){
-        
+        game_state.round = "finished";
+        return;
     }
     if(len == 0){
         game_state.round = "vote";
