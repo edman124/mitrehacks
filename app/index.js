@@ -273,7 +273,9 @@ class App extends React.Component {
             inputValue: "",
             id: null,
             role: null,
-            player: 1
+            player: 1,
+            finishedMessage: '',
+            finishedMessage2: ''
         }
         socket = openSocket(this.state.endpoint);
     }
@@ -364,9 +366,21 @@ class App extends React.Component {
         });
     }
 
-    openFinishModal() {
+    openFinishModal(data) {
+        var message1;
+        var message2;
+        if(data.win) {
+            message1 = 'You win'; 
+            message2 = 'The majority picked Player 1 and the catfish is Player 1'
+        }
+        else {
+            message1 = 'You lose';
+            message2 = 'The majority picked Player 2 and the catfish is Player 1'
+        }
         this.setState({
-            finishVisible: true
+            finishVisible: true,
+            finishedMessage: message1,
+            finishedMessage2: message2
         });
     }
 
@@ -429,8 +443,9 @@ class App extends React.Component {
         this.selectModal();
     }
     game_finished(data){
+        console.log("WE FINSIHED");
         console.log(data);
-        this.openFinishModal(); //DATA IS HERE ANDREW
+        this.openFinishModal(data); //DATA IS HERE ANDREW
     }
 
     changeGameState(result) {
@@ -510,7 +525,8 @@ class App extends React.Component {
                 </Modal>
                 <Modal visible={this.state.finishVisible} width="400" height="200" display="flex" effect="fadeInUp">
                     <div className="modal">
-                        <h1>Game Over</h1>
+                        <h1>{this.state.finishedMessage}</h1>
+                        <h1>{this.state.finishedMessage2}</h1>
                     </div>
                 </Modal>
                 <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">

@@ -82,7 +82,8 @@ io.on('connection',function(socket){                  // called when a new socke
         vote_count+=1
         if(!vote_start){
             for(var userid in Object.keys(game_state.user_data)){
-                tally[userid] = 0;
+            	console.log(userid);
+                tally[""+userid] = 0;
             }
             vote_start = true;
         }
@@ -192,7 +193,7 @@ function retrieve_likes(){
 	console.log("likes: " + game_state.likes);
 }
 function vote(id){
-    tally.userid+=1;
+    tally[id]+=1;
 }
 function check_vote_finished(){
     var size = Object.keys(game_state.user_data).length;
@@ -200,6 +201,7 @@ function check_vote_finished(){
     if(size == vote_count){
         over = true;
     }
+    console.log("is voting finished? " + over);
     return over;
 }
 
@@ -213,11 +215,21 @@ function end_game(){
     		max_key = id;
     	}
     }
-    var spy = ""
-    for (var uuid in joined_users){
+    var spy = "0";
+    console.log("length: " + Object.keys(joined_users).length);
+    console.log("joined_users: " + joined_users.uuid.role);
+    for (var uuid in Object.keys(joined_users)){
+    	console.log("uuid: " +uuid);
     	if(uuid.role == "catfish"){
-    		spy = uuid
-    	}
+    		spy = uuid;
+    		console.log("spy found");
+       	}
     }
-    io.emit('game_finished', game_state); //to add delay, comment this line, uncomment above
+    var win = (max_key == spy); 
+    console.log("max_key: " +max_key);
+    console.log("max: " + max);
+    console.log("spy: " + spy);
+    console.log("winner: "+ win); 
+    result = {"max_key": max_key, "max": max, "spy": spy, "win": win};
+    io.emit('game_finished', result); //to add delay, comment this line, uncomment above
 }
