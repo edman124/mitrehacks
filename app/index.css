@@ -3,18 +3,21 @@
   src: url("../public/fonts/avenir_next/AvenirNextLTPro-It.otf");
 } */
 body {
-  font-family: "Montserrat";
+  font-family: "Lato";
   margin: 0;
   font-size: 12px;
 }
 h1 {
-  font-family: "Montserrat";
+  font-family: "Lato";
   text-align: center;
   font-size: 20px;
 }
+input {
+  font-family: "Lato";
+}
 .modal {
-  padding-left: 20px;
-  padding-right: 30px;
+  margin: auto;
+  padding-top: 10%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,17 +60,17 @@ h1 {
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  font-weight: bold;
   overflow: visible;
 }
 #profile {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 40%;
+  height: 30%;
+  top: 80%;
+  left: 30%;
+  /* transform: translate(-50%, -50%); */
   text-align: center;
-  color: white;
-  font-weight: bold;
+  color: black;
   overflow: visible;
 }
 #twitter {
@@ -76,7 +79,6 @@ h1 {
   left: 50%;
   text-align: center;
   transform: translate(-50%, -50%);
-  font-weight: bold;
   overflow: visible;
 }
 #insta {
@@ -86,7 +88,6 @@ h1 {
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  font-weight: bold;
   overflow: visible;
 }
 #amazon {
@@ -98,7 +99,6 @@ h1 {
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  font-weight: bold;
   overflow: visible;
 }
 #fb {
@@ -109,7 +109,6 @@ h1 {
   left: 70%;
   transform: translate(-50%, -50%);
   /* text-align: center; */
-  font-weight: bold;
   overflow: visible;
 }
 
@@ -125,7 +124,6 @@ h1 {
   box-sizing: border-box;
   border-left: 1px solid rgba(95, 94, 94, 0.863);
   border-right: 1px solid rgba(95, 94, 94, 0.863);
-  font-weight: bold;
   font-size: 14px;
 }
 .player:hover {

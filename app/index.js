@@ -25,7 +25,7 @@ class Gameboard extends React.Component {
         return (
             <div id="gameboard">
                 <GridBox color="#FBC9FF" image="../public/img/netflix.png" category="netflix" value="8:00PM"></GridBox>
-                <GridBox color="#88E6D8" image="../public/img/profile.png" category="profile"></GridBox>
+                <GridBox color="#88E6D8" image="../public/img/profile.png" category="profile" value="description of my profile picture doing"></GridBox>
                 <GridBox color="#FFD769" image="../public/img/twitter.png" category="twitter" value="twitter"></GridBox>
                 <GridBox color="#C0F8B2" image="../public/img/insta.png" category="insta" value="instagram"></GridBox>
                 <GridBox color="#A4B0F2" image="../public/img/amazon.png" category="amazon" value="wishlist"></GridBox>
@@ -39,11 +39,10 @@ class Playerboard extends React.Component {
         console.log(el);
         for (var i = 1; i < 7; i++) {
             document.getElementById(i).style.backgroundColor = "#fff";
-            document.getElementById(i).style.fontSize = "14px";
-            document.getElementById(i).style.fontWeight = "bold";
+            document.getElementById(i).style.fontWeight = "normal";
         }
         document.getElementById(el).style.backgroundColor = "#a3a3a3b6";
-        document.getElementById(el).style.fontSize = "18px";
+        document.getElementById(el).style.fontSize = "bold";
         // Switch information on boards with info of player with id el
     }
     render() {
@@ -171,7 +170,7 @@ class App extends React.Component {
                 <input type="button" value="Open" onClick={() => this.openInstaModal()} />
                 <input type="button" value="Open" onClick={() => this.openAmazonModal()} />
                 <input type="button" value="Open" onClick={() => this.openFbModal()} />
-                <Modal visible={this.state.netflixVisible} width="400" height="200" effect="fadeInUp">
+                <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">
                     <div className="modal">
                         <h1>What time do you watch Netflix?</h1>
                         <input />
@@ -182,8 +181,7 @@ class App extends React.Component {
                     <div className="modal">
                         <h1>What is your profile picture?</h1>
                         <input />
-                        <p>Some Contents</p>
-                        <a href="javascript:void(0);" onClick={() => this.closeProfileModal()}>Close</a>
+                        <a href="javascript:void(0);" onClick={() => this.closeProfileModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal visible={this.state.twitterVisible} width="400" height="200" effect="fadeInUp">
@@ -207,7 +205,7 @@ class App extends React.Component {
                         <a href="javascript:void(0);" onClick={() => this.closeAmazonModal()}>Submit</a>
                     </div>
                 </Modal>
-                <Modal visible={this.state.fbVisible} width="400" height="200" effect="fadeInUp">
+                <Modal className="something" visible={this.state.fbVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What's your Facebook status?</h1>
                         <input />
