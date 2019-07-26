@@ -158,3 +158,4 @@ function retrieve_likes(){
 	game_state.likes = [...temp]; //remove duplicates
 	console.log("likes: " + game_state.likes);
 }
+
