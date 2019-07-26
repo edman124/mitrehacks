@@ -67,15 +67,32 @@ io.on('connection',function(socket){                  // called when a new socke
     })
 
     socket.on('move', function(obj){
+    	if(obj.flag){
+    		console.log("move input obj",obj);
+	        game_state["user_data"][obj.id][obj.round] = obj.answer
+	        console.log("post move game state", game_state);
+	        console.log("check round finished", check_round_finished(game_state.round))
+	        if(check_round_finished(game_state.round)){
+	            round_finished();
+	        }
+    	}
+    	else {
+    		round_finished();
+    	}
         //object is {id: _, round: _, answer: _}
-        console.log("move input obj",obj);
-        game_state["user_data"][obj.id][obj.round] = obj.answer
-        console.log("post move game state", game_state);
-        console.log("check round finished", check_round_finished(game_state.round))
-        if(check_round_finished(game_state.round)){
-            round_finished();
-        }
+        
+        // if(obj.flag) {
 
+        // }
+        // else {
+        // 	console.log("move input obj",obj);
+	       //  game_state["user_data"][obj.id][obj.round] = obj.answer
+	       //  console.log("post move game state", game_state);
+	       //  console.log("check round finished", check_round_finished(game_state.round))
+	       //  if(check_round_finished(game_state.round)){
+	       //      round_finished();
+	       //  }
+        // }
     })
 
     socket.on('vote', function(obj){
@@ -129,18 +146,19 @@ function check_round_finished(round){
 
 function round_finished(){
     set_round(game_state.round);
-    // setTimeout(function(){
-    //     io.emit('round_finished', game_state);
-    // },15000); //delay 15 seconds 
-    io.emit('round_finished', game_state); //to add delay, comment this line, uncomment above
+    setTimeout(function(){
+        io.emit('round_finished', game_state);
+    },15000); //delay 15 seconds 
+    // io.emit('round_finished', game_state); //to add delay, comment this line, uncomment above
 }
 
 function start_game(){
     if(!game_started){
-        var len = unused_rounds.length;
-        var index = Math.floor(Math.random()*len);
-        var next_round = unused_rounds[index];
-        unused_rounds.splice(index, 1);
+    	var next_round = "instructions";
+        // var len = unused_rounds.length;
+        // var index = Math.floor(Math.random()*len);
+        // var next_round = unused_rounds[index];
+        // unused_rounds.splice(index, 1);
         game_state.round = next_round;
         retrieve_likes();
         game_started = true;

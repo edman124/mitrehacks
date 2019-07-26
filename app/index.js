@@ -67,6 +67,7 @@ class Playerboard extends React.Component {
         // Switch information on boards with info of player with id el
     }
     render() {
+        var num = this.props.yourPlayer;
         return (
             <div id="playerboard">
                 <div className="player" id="1" onClick={this.switchBoard.bind(this, 1)}>Player 1</div>
@@ -275,7 +276,9 @@ class App extends React.Component {
             role: null,
             player: 1,
             finishedMessage: '',
-            finishedMessage2: ''
+            finishedMessage2: '',
+            countFlag: 0, 
+            introMessage: 'You will either be the catfish or one of the targets. As a target, you will be given a list of likes to create a social media profile. All the targets will have the same likes. The catfish will not get any more information. The objective of this game for the targets is to discover who the catfish is, while the catfish tries to avoid detection. Are you ready?'
         }
         socket = openSocket(this.state.endpoint);
     }
@@ -291,7 +294,7 @@ class App extends React.Component {
         this.setState({
             netflixVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
     openProfileModal() {
         this.setState({
@@ -303,7 +306,7 @@ class App extends React.Component {
         this.setState({
             profileVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
     openTwitterModal() {
         this.setState({
@@ -315,7 +318,7 @@ class App extends React.Component {
         this.setState({
             twitterVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
     openInstaModal() {
         this.setState({
@@ -327,7 +330,7 @@ class App extends React.Component {
         this.setState({
             instaVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
     openAmazonModal() {
         this.setState({
@@ -339,7 +342,7 @@ class App extends React.Component {
         this.setState({
             amazonVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
     openFbModal() {
         this.setState({
@@ -351,7 +354,7 @@ class App extends React.Component {
         this.setState({
             fbVisible: false
         });
-        this.submitAnswer();
+        this.submitAnswer(true);
     }
 
     openVoteModal() {
@@ -370,11 +373,11 @@ class App extends React.Component {
         var message1;
         var message2;
         if(data.win) {
-            message1 = 'You win'; 
-            message2 = 'The majority picked Player 1 and the catfish is Player 1'
+            message1 = 'You win!'; 
+            message2 = 'The majority picked Player 1 and the catfish is Player 1.'
         }
         else {
-            message1 = 'You lose';
+            message1 = 'You lose :(';
             message2 = 'The majority picked Player 2 and the catfish is Player 1'
         }
         this.setState({
@@ -382,6 +385,26 @@ class App extends React.Component {
             finishedMessage: message1,
             finishedMessage2: message2
         });
+    }
+
+    openInstructionsModal() {
+        this.setState({
+            instructionsVisible: true
+        })
+    }
+
+    closeInstructionsModal() {
+        var flag = this.state.countFlag + 1; 
+        this.setState({
+            countFlag: flag,
+            introMessage: 'You are the cafish'
+        })
+        if(this.state.countFlag == 1){
+            this.setState({
+                instructionsVisible: false
+            })
+            this.submitAnswer(false);
+        }
     }
 
     updateInputValue(evt) {
@@ -408,6 +431,9 @@ class App extends React.Component {
 
     selectModal() {
         switch (this.state.game_state.round) {
+            case "instructions": 
+                this.openInstructionsModal(); 
+                break;
             case "avatar":
                 this.openProfileModal();
                 break;
@@ -429,7 +455,7 @@ class App extends React.Component {
             case "finished":
                 break;
             case "vote":
-            this.openVoteModal();
+                this.openVoteModal();
                 break;
         }
     }
@@ -459,11 +485,12 @@ class App extends React.Component {
 
 
     submitAnswer(input) {
+        console.log("submit Answer's input is " + input);
         console.log("Submit answer", this.state.game_state);
         this.setState({
             inputValue: ""
         })
-        socket.emit('move', { "id": this.state.id, "round": this.state.game_state.round, "answer": this.state.inputValue });
+        socket.emit('move', { "id": this.state.id, "round": this.state.game_state.round, "answer": this.state.inputValue, "flag": input});
     }
 
     componentDidMount() {
@@ -508,7 +535,7 @@ class App extends React.Component {
             <div id="largeContainer">
                 <div id="container">
                     <Gameboard player={this.state.player}></Gameboard>
-                    <Playerboard callback={this.playerboardChanged}></Playerboard>
+                    <Playerboard callback={this.playerboardChanged} yourPlayer={this.state.player}></Playerboard>
                 </div>
                 <div>{game_state}</div>
                 {/* <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
@@ -564,18 +591,26 @@ class App extends React.Component {
                         <a href="javascript:void(0);" onClick={() => this.closeAmazonModal()}>Submit</a>
                     </div>
                 </Modal>
-                <Modal className="something" visible={this.state.fbVisible} width="400" height="200" effect="fadeInUp">
+                <Modal visible={this.state.fbVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What's your Facebook status?</h1>
                         <input value={this.state.inputValue} onChange={this.updateInputValue} />
                         <a href="javascript:void(0);" onClick={() => this.closeFbModal()}>Submit</a>
                     </div>
                 </Modal>
+                <Modal visible={this.state.instructionsVisible} width="400" height="420" effect="fadeInUp">
+                    <div className="modal">
+                        <h1>Welcome to Catfish!</h1>
+                        <p>{this.state.introMessage}</p>
+                        <input value={this.state.inputValue} onChange={this.updateInputValue} id="hidden"/>
+                        <a href="javascript:void(0);" onClick={() => this.closeInstructionsModal()}>Join Game</a>
+                    </div>
+                </Modal>
                 <div id="slideout">
                     {/* <img src="../public/img/like.png" alt="Likes" /> */}
                     <div id="out">
                         <div id="image">
-                            <img id="pic" src="../public/img/output-onlinepngtools.png" alt="Likes" />
+                            &#12297;
                         </div>
                     </div>
                     <div id="slideout_inner">
