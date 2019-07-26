@@ -122,6 +122,106 @@ class Collapsible extends React.Component {
     }
 }
 
+// var Parent = React.createClass({
+//     getInitialState: function () {
+//         return { sidebarOpen: false };
+//     },
+//     handleViewSidebar: function () {
+//         this.setState({ sidebarOpen: !this.state.sidebarOpen });
+//     },
+//     render: function () {
+//         return (
+//             <div>
+//                 <Header onClick={this.handleViewSidebar} />
+//                 <SideBar isOpen={this.state.sidebarOpen} toggleSidebar={this.handleViewSidebar} />
+//                 <Content isOpen={this.state.sidebarOpen} />
+//             </div>
+//         );
+//     }
+// });
+
+class Parent extends React.Component {
+    getInitialState() {
+        return { sidebarOpen: false };
+    }
+    handleViewSidebar() {
+        this.setState({ sidebarOpen: !this.state.sidebarOpen });
+    }
+    render() {
+        return (
+            <div>
+                <Header onClick={this.handleViewSidebar} />
+                <SideBar isOpen={this.state.sidebarOpen} toggleSidebar={this.handleViewSidebar} />
+                <Content isOpen={this.state.sidebarOpen} />
+            </div>
+        );
+    }
+}
+// var Header = React.createClass({
+//     render: function () {
+//         return (
+//             <header>
+//                 <a href="javascript:;" onClick={this.props.onClick}>Click Me!</a>
+//             </header>
+//         );
+//     }
+// });
+
+class Header extends React.Component {
+    render() {
+        return (
+            <header>
+                <a href="javascript:;" onClick={this.props.onClick}>Click Me!</a>
+            </header>
+        );
+    }
+}
+
+// var SideBar = React.createClass({
+//     render: function () {
+//         var sidebarClass = this.props.isOpen ? 'sidebar open' : 'sidebar';
+//         return (
+//             <div className={sidebarClass}>
+//                 <div>I slide into view</div>
+//                 <div>Me too!</div>
+//                 <div>Meee Threeeee!</div>
+//                 <button onClick={this.props.toggleSidebar} className="sidebar-toggle">Toggle Sidebar</button>
+//             </div>
+//         );
+//     }
+// });
+
+class SideBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.render.bind(this)
+        this.sidebarClass = this.props.isOpen ? 'sidebar open' : 'sidebar';
+    }
+    render() {
+        return (
+            <div className={sidebarClass}>
+                <div>I slide into view</div>
+                <div>Me too!</div>
+                <div>Meee Threeeee!</div>
+                <button onClick={this.props.toggleSidebar} className="sidebar-toggle">Toggle Sidebar</button>
+            </div>
+        );
+    }
+}
+
+class Content extends React.Component {
+    constructor(props) {
+        super(props);
+        this.render.bind(this)
+        this.contentClass = this.props.isOpen ? 'content open' : 'content';
+    }
+    render() {
+        return (
+            <div className={contentClass}>I am content fill me up!</div>
+        );
+    }
+}
+
 class App extends React.Component {
     render() {
         return (
@@ -130,7 +230,8 @@ class App extends React.Component {
                     <Gameboard></Gameboard>
                     <Playerboard></Playerboard>
                 </div>
-                <Sidebar></Sidebar>
+                {/* <Sidebar></Sidebar> */}
+                {/* <Parent /> */}
             </div>
         )
     }
