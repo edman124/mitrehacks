@@ -126,7 +126,10 @@ function check_round_finished(round){
 
 function round_finished(){
     set_round(game_state.round);
-    io.emit('round_finished', game_state);
+    // setTimeout(function(){
+    //     io.emit('round_finished', game_state);
+    // },15000); //delay 15 seconds 
+    io.emit('round_finished', game_state); //to add delay, comment this line, uncomment above
 }
 
 function start_game(){

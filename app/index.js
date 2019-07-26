@@ -258,6 +258,7 @@ class App extends React.Component {
         this.changeGameState = this.changeGameState.bind(this)
         this.playerboardChanged = this.playerboardChanged.bind(this);
         this.state = {
+            voteVisible: false,
             netflixVisible: false,
             profileVisible: false,
             twitterVisible: false,
@@ -348,6 +349,18 @@ class App extends React.Component {
         this.submitAnswer();
     }
 
+    openVoteModal() {
+        this.setState({
+            voteVisible: true
+        });
+    }
+
+    closeVoteModal() {
+        this.setState({
+            voteVisible: false
+        });
+    }
+
     updateInputValue(evt) {
         this.setState({
             inputValue: evt.target.value
@@ -393,39 +406,9 @@ class App extends React.Component {
             case "finished":
                 break;
             case "vote":
+            this.openVoteModal();
                 break;
         }
-    }
-
-    selectPlayer(id) {
-        switch (id) {
-            case "avatar":
-                this.openProfileModal();
-                break;
-            case "twitter":
-                this.openTwitterModal();
-                break;
-            case "netflix":
-                this.openNetflixModal();
-                break;
-            case "amazon":
-                this.openAmazonModal();
-                break;
-            case "fb":
-                this.openFbModal();
-                break;
-            case "instagram":
-                this.openInstaModal();
-                break;
-            case "finished":
-                break;
-            case "vote":
-                break;
-        }
-    }
-
-    populateData(id) {
-
     }
 
     changeGameState(result) {
@@ -466,8 +449,20 @@ class App extends React.Component {
         })
     }
 
+    voteClicked(vote){
+        console.log(vote);
+        socket.emit('vote', vote);
+        closeVoteModal();
+    }
+
     render() {
         let { game_state } = this.state.game_state;
+
+        var players = [];
+        for(var id in [1,2,3,4,5,6]){
+            players.push(<button onClick={this.voteClicked.bind(null,id)}>{id}</button>)
+        }
+
         console.log("Game State", this.state.game_state);
         return (
             <div id="largeContainer">
@@ -482,6 +477,12 @@ class App extends React.Component {
                 <input type="button" value="Open" onClick={() => this.openInstaModal()} />
                 <input type="button" value="Open" onClick={() => this.openAmazonModal()} />
                 <input type="button" value="Open" onClick={() => this.openFbModal()} /> */}
+                <Modal visible={this.state.voteVisible} width="600" height="200" display="flex" effect="fadeInUp">
+                    <div className="modal">
+                        <h1>Who is the catfish?</h1>
+                        <ul>{players}</ul>
+                    </div>
+                </Modal>
                 <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">
                     <div className="modal">
                         <h1>What time do you watch Netflix?</h1>
