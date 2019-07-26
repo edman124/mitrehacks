@@ -25,6 +25,9 @@ var game_started = false;
 
 var current_id = 1;
 
+var vote_start = false;
+
+var tally = {};
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
 // -------------- express getter -------------- //
@@ -71,6 +74,16 @@ io.on('connection',function(socket){                  // called when a new socke
             round_finished();
         }
 
+    })
+
+    socket.on('vote', function(obj){
+        if(!vote_start){
+            for(var userid in game_state.user_data){
+                tally.push({key: userid, value: 0});
+            }
+            vote_start = true;
+        }
+        vote(obj.id);
     })
 
 })
@@ -143,7 +156,7 @@ function set_round(round){
 function retrieve_likes(){
 	// up to 4 possible picks from each topic
 	temp = new Set();
-	var reps = Math.floor(Math.random()*3)+1;
+	var reps = Math.floor(Math.random()*2)+1;
 	for(var topic in all_likes){
 		console.log(topic);
 		if(topic != 'Organizations' && topic != 'Restaurants'){
@@ -155,7 +168,7 @@ function retrieve_likes(){
 		}
 		else{
 			// the purpose of reps in the else statement is to decide whether to pass organizations/restaurants, which do not have a lot of examples
-			if(reps <2){
+			if(reps < 2){
 				var len = all_likes[topic].length;
 				var index = Math.floor(Math.random()*len);
 				temp.add(all_likes[topic][index]);
@@ -165,4 +178,10 @@ function retrieve_likes(){
 	} 
 	game_state.likes = [...temp]; //remove duplicates
 	console.log("likes: " + game_state.likes);
+}
+function vote(id){
+    tally.id+=1;
+}
+function check_vote_finished(){
+    var size = 1;
 }

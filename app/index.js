@@ -81,22 +81,24 @@ class Playerboard extends React.Component {
 }
 
 class Sidebar extends React.Component {
-    likeTraits() {
-        let likeList = this.props.gamestate
-        let likeComp = []
-        let rowDiv = []
-        for (var i = 0; i < likeList.length; i++) {
-            rowDiv.push(<div className="trait">{likeList[i]}</div>)
-            if (i % 2 == 1) {
-                likeComp.push(<div className="traitRow">{rowDiv}</div>)
-                rowDiv = []
+    likeTraits(gamestate) {
+        let likeList = gamestate
+        if(likeList!==undefined){
+            let likeComp = []
+            let rowDiv = []
+            for (var i = 0; i < likeList.length; i++) {
+                rowDiv.push(<div className="trait">{likeList[i]}</div>)
+                if (i % 2 == 1) {
+                    likeComp.push(<div className="traitRow">{rowDiv}</div>)
+                    rowDiv = []
+                }
             }
+            if (rowDiv) {
+                // rowDiv.push(<div className="trait"></div>)
+                likeComp.push(<div className="traitRow">{rowDiv}</div>)
+            }
+            return likeComp
         }
-        if (rowDiv) {
-            // rowDiv.push(<div className="trait"></div>)
-            likeComp.push(<div className="traitRow">{rowDiv}</div>)
-        }
-        return likeComp
     }
     // recentActivity() {
     //     let dislikeList = ['School', 'Work', 'Pop', 'Fox News']
@@ -111,7 +113,7 @@ class Sidebar extends React.Component {
             <div id="sidebarContent">
                 <div className="title">Likes</div>
                 <div id="likesDiv" className="contentDiv">
-                    {this.likeTraits()}
+                    {this.likeTraits(this.props.gamestate.likes)}
                 </div>
                 {/* <div className="title">Recent Activity</div>
                 <div id="recent" className="contentDiv">
@@ -474,12 +476,12 @@ class App extends React.Component {
                     <Playerboard callback={this.playerboardChanged}></Playerboard>
                 </div>
                 <div>{game_state}</div>
-                <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
+                {/* <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
                 <input type="button" value="Open" onClick={() => this.openProfileModal()} />
                 <input type="button" value="Open" onClick={() => this.openTwitterModal()} />
                 <input type="button" value="Open" onClick={() => this.openInstaModal()} />
                 <input type="button" value="Open" onClick={() => this.openAmazonModal()} />
-                <input type="button" value="Open" onClick={() => this.openFbModal()} />
+                <input type="button" value="Open" onClick={() => this.openFbModal()} /> */}
                 <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">
                     <div className="modal">
                         <h1>What time do you watch Netflix?</h1>
@@ -522,7 +524,12 @@ class App extends React.Component {
                         <a href="javascript:void(0);" onClick={() => this.closeFbModal()}>Submit</a>
                     </div>
                 </Modal>
-                <Sidebar gamestate={this.state.game_state}></Sidebar>
+                <div id="slideout">
+                <img src="../public/img/like.png" alt="Likes" />
+                <div id="slideout_inner">
+                    <Sidebar gamestate={this.state.game_state}></Sidebar>
+                </div>
+                </div>
             </div>
         )
     }
