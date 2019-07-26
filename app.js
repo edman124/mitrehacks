@@ -5,20 +5,25 @@ var express = require('express');                     // import express
 var app = express();                                  // create an app from express
 var server =  require('http').createServer(app);      // import http and create a server
 var io = require('socket.io').listen(server);         // attach socket.io to the server
-
+var all_likes = require('./likes.js');
 
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
-server.listen(process.env.PORT || 8080);              // listen for incoming connections
+server.listen(process.env.PORT || 3000);              // listen for incoming connections
 
 // -------------- variables  -------------- //
 var game_state = {
     round: "",
-    user_data: {}
+    user_data: {},
+    likes: []
 }
 
 var joined_users = {};
 
 var unused_rounds = ["avatar", "twitter", "netflix", "amazon", "fb", "instagram"];
+
+var game_started = false;
+
+var current_id = 1;
 
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
@@ -35,8 +40,10 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         console.log("Game Started");
-        set_round();
-        var uuid = gen_uuid();
+        start_game(); // likes are retrieved here
+        // var uuid = gen_uuid();
+        var uuid = current_id;
+        current_id++;
         joined_users.uuid = 
             {id: uuid, 
             role: gen_status()
@@ -45,10 +52,13 @@ io.on('connection',function(socket){                  // called when a new socke
         //game_state.user_data.push(joined_users.uuid);
         game_state["user_data"][uuid] = {};
         console.log("Init Game State",game_state);
-        socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
-
+        //socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
         
-        //io.emit('server_msg', button_count++);        // server server-side emit to all clients
+        // push both the game_stat and uuid on server start 
+        
+        var result = {gs: game_state, user: joined_users.uuid};
+        
+        socket.emit('game_started', result);        // server server-side emit to all clients
     })
 
     socket.on('move', function(obj){
@@ -58,7 +68,7 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log("post move game state", game_state);
         console.log("check round finished", check_round_finished(game_state.round))
         if(check_round_finished(game_state.round)){
-            set_round(game_state.round);
+            round_finished();
         }
 
     })
@@ -86,25 +96,73 @@ function check_round_finished(round){
 		if(!game_state.user_data[userid].hasOwnProperty(round)){
 			finished = false;
 		}
-	}
+    }
+    // if(Object.keys(joined_users).length < 7){
+    //     finished = false;
+    // }
 	return finished
 
 }
 
 function round_finished(){
-    prev_round.push(game_state.round);
-    set_round();
+    set_round(game_state.round);
     io.emit('round_finished', game_state);
 }
 
+function start_game(){
+    if(!game_started){
+        var len = unused_rounds.length;
+        var index = Math.floor(Math.random()*len);
+        var next_round = unused_rounds[index];
+        unused_rounds.splice(index, 1);
+        game_state.round = next_round;
+        retrieve_likes();
+        game_started = true;
+        return next_round;
+    }
+}
 function set_round(round){
     var len = unused_rounds.length;
+    if(game_state.round == "vote"){
+        game_state.round = "finished";
+        return;
+    }
+    if(len == 0){
+        game_state.round = "vote";
+        return;
+    }
     var index = Math.floor(Math.random()*len);
     var next_round = unused_rounds[index];
+    console.log(unused_rounds);
     unused_rounds.splice(index, 1);
-    if(typeof round === "undefined"){
-    	round = next_round;
-    }
-    game_state.round = round;
+    console.log(unused_rounds);
+    game_state.round = next_round;
     return next_round;
+}
+
+function retrieve_likes(){
+	// up to 4 possible picks from each topic
+	temp = new Set();
+	var reps = Math.floor(Math.random()*3)+1;
+	for(var topic in all_likes){
+		console.log(topic);
+		if(topic != 'Organizations' && topic != 'Restaurants'){
+			for(var i=0; i<reps; i++){
+				var len = all_likes[topic].length;
+				var index = Math.floor(Math.random()*len);
+				temp.add(all_likes[topic][index]);
+			}
+		}
+		else{
+			// the purpose of reps in the else statement is to decide whether to pass organizations/restaurants, which do not have a lot of examples
+			if(reps <2){
+				var len = all_likes[topic].length;
+				var index = Math.floor(Math.random()*len);
+				temp.add(all_likes[topic][index]);
+			}
+		}
+		
+	} 
+	game_state.likes = [...temp]; //remove duplicates
+	console.log("likes: " + game_state.likes);
 }

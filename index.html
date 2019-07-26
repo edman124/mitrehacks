@@ -8,23 +8,30 @@
         <script>
             // create the socket object. you need to add a path when you run in subspace, like us
             var socket = io.connect();
-            socket.on('server_msg', function(response_str){    // create a client-side callback function
+            var game_state;
+            var id;
+            socket.on('game_started', function(result){    // create a client-side callback function
                 p = document.getElementById('response');
-                p.innerHTML = response_str.id;
+                id = result.user.id;
+                p.innerHTML = result.user.id;
+                console.log("client id is: " + id);
+                game_state = result.gs;
             });
 
             socket.on('round_finished', function(response){
+                game_state=response;
                 console.log(response);
             });
-        </script>
-        
-        <script type="text/javascript">
+            //we need an on to retrieve information when another player's tab is clicked 
+    
             function doSocket() {                               
                 socket.emit('join_game', { keys : 'values'} ); // client-side socket emit
             }
             function makeMove(){
-                socket.emit('move', {"id": document.getElementById('response').innerHTML, "round": "fb", "answer": "cool"});
+                console.log("current round is: " + game_state.round);
+                socket.emit('move', {"id": id, "round": game_state.round, "answer": "cool"});
             }
+            //we need an emit to retrieve information when another player's tab is clicked
         </script>
         
     </head>

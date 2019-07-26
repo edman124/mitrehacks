@@ -1,3 +1,7 @@
+/* @font-face {
+  font-family: "Avenir";
+  src: url("../public/fonts/avenir_next/AvenirNextLTPro-It.otf");
+} */
 body {
 	margin: 0;
 }
@@ -12,18 +16,152 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  font-family: "Lato";
+  margin: 0;
+  font-size: 12px;
 }
+h1 {
+  font-family: "Lato";
+  text-align: center;
+  font-size: 20px;
+}
+input {
+  font-family: "Lato";
+}
+.modal {
+  margin: auto;
+  padding-top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#container {
+  width: 98%;
+}
+#gameboard {
+  display: flex;
+  height: 92%;
+  flex-wrap: wrap;
+}
+.grid_box {
+  width: 33.33333%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.thumbnail {
+  position: relative;
+  width: 75%;
+  height: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: cover;
+}
+.thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+#netflix {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  overflow: visible;
+}
+#profile {
+  position: absolute;
+  width: 40%;
+  height: 30%;
+  top: 80%;
+  left: 30%;
+  /* transform: translate(-50%, -50%); */
+  text-align: center;
+  color: black;
+  overflow: visible;
+}
+#twitter {
+  position: absolute;
+  top: 53%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+#insta {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  overflow: visible;
+}
+#amazon {
+  position: absolute;
+  height: 20%;
+  width: 38%;
+  top: 55%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  overflow: visible;
+}
+#fb {
+  position: absolute;
+  height: 35%;
+  width: 55%;
+  top: 40%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  /* text-align: center; */
+  overflow: visible;
+}
+
 #playerboard {
 	display: flex;
 	min-height: 8%;
 }
+
 .player {
-	min-width: 16.66%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-	border: 1px solid black;
+  width: 16.6666%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border-left: 1px solid rgba(95, 94, 94, 0.863);
+  border-right: 1px solid rgba(95, 94, 94, 0.863);
+  font-size: 14px;
+}
+.player:hover {
+  /* background-color: #d3d3d3; */
+  background-color: #a9a9a9;
+  box-shadow: 0 5px #666;
+  cursor: pointer;
+}
+.player:active {
+  background-color: #a9a9a9;
+  box-shadow: 0 5px #666;
+}
+#sidebar {
+  width: 2%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(141, 140, 140);
+  color: #fff;
+  font-size: 24px;
 }
 #boardContainer {
 	width: 98%;
