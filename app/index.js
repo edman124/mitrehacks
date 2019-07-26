@@ -61,16 +61,6 @@ class Playerboard extends React.Component {
 }
 
 class Sidebar extends React.Component {
-    render() {
-        return (
-            <div id="sidebar">
-                &#x2329;
-            </div>
-        )
-    }
-}
-
-class Sidebar extends React.Component {
     likeTraits() {
         let likeList = ['Starbucks', 'CNN', 'Rap', 'Anime', 'Hamburgers']
         let likeComp = []
@@ -207,23 +197,23 @@ class Header extends React.Component {
 //     }
 // });
 
-class SideBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.render.bind(this)
-        this.sidebarClass = this.props.isOpen ? 'sidebar open' : 'sidebar';
-    }
-    render() {
-        return (
-            <div className={sidebarClass}>
-                <div>I slide into view</div>
-                <div>Me too!</div>
-                <div>Meee Threeeee!</div>
-                <button onClick={this.props.toggleSidebar} className="sidebar-toggle">Toggle Sidebar</button>
-            </div>
-        );
-    }
-}
+// class SideBar extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.render.bind(this)
+//         this.sidebarClass = this.props.isOpen ? 'sidebar open' : 'sidebar';
+//     }
+//     render() {
+//         return (
+//             <div className={sidebarClass}>
+//                 <div>I slide into view</div>
+//                 <div>Me too!</div>
+//                 <div>Meee Threeeee!</div>
+//                 <button onClick={this.props.toggleSidebar} className="sidebar-toggle">Toggle Sidebar</button>
+//             </div>
+//         );
+//     }
+// }
 
 class Content extends React.Component {
     constructor(props) {
@@ -439,12 +429,11 @@ class App extends React.Component {
         let { game_state } = this.state.game_state;
         console.log("Game State", this.state.game_state);
         return (
-            <div>
+            <div id="largeContainer">
                 <div id="container">
                     <Gameboard></Gameboard>
                     <Playerboard></Playerboard>
                 </div>
-                <Sidebar></Sidebar>
                 <div>{game_state}</div>
                 <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
                 <input type="button" value="Open" onClick={() => this.openProfileModal()} />
@@ -494,7 +483,7 @@ class App extends React.Component {
                         <a href="javascript:void(0);" onClick={() => this.closeFbModal()}>Submit</a>
                     </div>
                 </Modal>
-
+                <Sidebar></Sidebar>
             </div>
         )
     }
