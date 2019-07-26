@@ -47,11 +47,11 @@ io.on('connection',function(socket){                  // called when a new socke
         //game_state.user_data.push(joined_users.uuid);
         game_state["user_data"][uuid] = {};
         console.log("Init Game State",game_state);
-        socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
+        //socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
         
-
-        
-        //io.emit('server_msg', button_count++);        // server server-side emit to all clients
+        // push both the game_stat and uuid on server start 
+        var result = {gs: game_state, id: joined_users.uuid};
+        io.emit('server_msg', result);        // server server-side emit to all clients
     })
 
     socket.on('move', function(obj){
