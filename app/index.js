@@ -4,6 +4,8 @@ import Modal from 'react-awesome-modal';
 import openSocket from 'socket.io-client';
 import './index.css';
 
+var socket;
+
 class GridBox extends React.Component {
     render() {
         return (
@@ -72,6 +74,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.gameStarted = this.gameStarted.bind(this)
+        this.updateInputValue = this.updateInputValue.bind(this)
+        this.changeGameState = this.changeGameState.bind(this)
         this.state = {
             netflixVisible: false,
             profileVisible: false,
@@ -80,8 +84,12 @@ class App extends React.Component {
             amazonVisible: false,
             fbVisible: false,
             endpoint: "localhost:3000",
-            game_state: {}
+            game_state: {},
+            inputValue: "",
+            id: null,
+            role: null
         }
+        socket = openSocket(this.state.endpoint);
     }
 
 
@@ -95,6 +103,7 @@ class App extends React.Component {
         this.setState({
             netflixVisible: false
         });
+        this.submitAnswer();
     }
     openProfileModal() {
         this.setState({
@@ -106,6 +115,7 @@ class App extends React.Component {
         this.setState({
             profileVisible: false
         });
+        this.submitAnswer();
     }
     openTwitterModal() {
         this.setState({
@@ -117,6 +127,7 @@ class App extends React.Component {
         this.setState({
             twitterVisible: false
         });
+        this.submitAnswer();
     }
     openInstaModal() {
         this.setState({
@@ -128,6 +139,7 @@ class App extends React.Component {
         this.setState({
             instaVisible: false
         });
+        this.submitAnswer();
     }
     openAmazonModal() {
         this.setState({
@@ -139,6 +151,7 @@ class App extends React.Component {
         this.setState({
             amazonVisible: false
         });
+        this.submitAnswer();
     }
     openFbModal() {
         this.setState({
@@ -150,6 +163,14 @@ class App extends React.Component {
         this.setState({
             fbVisible: false
         });
+        this.submitAnswer();
+    }
+
+    updateInputValue(evt) {
+        this.setState({
+          inputValue: evt.target.value
+        });
+        console.log(this.state.inputValue);
     }
 
     gameStarted(result){
@@ -158,18 +179,32 @@ class App extends React.Component {
         var id = result.user.id;
         console.log("client id is: " + id);
         this.setState({
+            role: result.user.role,
+            id: result.user.id,
             game_state: result.gs
         });
+    }
+
+    changeGameState(result){
+        this.setState({
+            game_state: result
+        });
+        console.log("round finished");
+    }
+
+    submitAnswer(input){
+        console.log("Submit answer", this.state.game_state);
+        socket.emit('move', {"id": this.state.id, "round": this.state.game_state.round, "answer": this.state.inputValue});
     }
 
     componentDidMount(){
         console.log("mounted");
 
-        const socket = openSocket(this.state.endpoint);
-
         socket.emit('join_game', { keys : 'values'} ); 
 
         socket.on('game_started', this.gameStarted);
+
+        socket.on('round_finished', this.changeGameState);
     }
 
     componentWillUnmount() {
@@ -196,42 +231,42 @@ class App extends React.Component {
                 <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">
                     <div className="modal">
                         <h1>What time do you watch Netflix?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeNetflixModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal visible={this.state.profileVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What is your profile picture?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeProfileModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal visible={this.state.twitterVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What's your Twitter handle?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeTwitterModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal visible={this.state.instaVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>Which famous person would you follow?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeInstaModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal visible={this.state.amazonVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What is on your Amazon wishlist?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeAmazonModal()}>Submit</a>
                     </div>
                 </Modal>
                 <Modal className="something" visible={this.state.fbVisible} width="400" height="200" effect="fadeInUp">
                     <div className="modal">
                         <h1>What's your Facebook status?</h1>
-                        <input />
+                        <input value={this.state.inputValue} onChange={this.updateInputValue}/>
                         <a href="javascript:void(0);" onClick={() => this.closeFbModal()}>Submit</a>
                     </div>
                 </Modal>

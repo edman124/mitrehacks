@@ -92,7 +92,10 @@ function check_round_finished(round){
 		if(!game_state.user_data[userid].hasOwnProperty(round)){
 			finished = false;
 		}
-	}
+    }
+    if(Object.keys(joined_users).length < 7){
+        finished = false;
+    }
 	return finished
 
 }
