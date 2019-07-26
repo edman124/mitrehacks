@@ -37,7 +37,7 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         console.log("Game Started");
-        set_round();
+        set_round(game_state.round);
         var uuid = gen_uuid();
         joined_users.uuid = 
             {id: uuid, 
