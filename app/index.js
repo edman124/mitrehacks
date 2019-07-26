@@ -5,6 +5,8 @@ import openSocket from 'socket.io-client';
 import './index.css';
 
 var socket;
+var universalGameState = {}; //dangerous
+var current_id = 1;
 
 class GridBox extends React.Component {
     render() {
@@ -23,14 +25,31 @@ class GridBox extends React.Component {
 
 class Gameboard extends React.Component {
     render() {
+        var netflix;
+        var profile;
+        var twitter;
+        var insta;
+        var amazon;
+        var fb;
+        if (!(universalGameState["user_data"] === undefined)) {
+            var answers = universalGameState["user_data"][this.props.player];
+            netflix = answers["netflix"];
+            profile = answers["avatar"];
+            twitter = answers["twitter"];
+            insta = answers["instagram"];
+            amazon = answers["amazon"];
+            fb = answers["fb"];
+            console.log("Player in gb", this.props.player);
+        }
+
         return (
             <div id="gameboard">
-                <GridBox color="#FBC9FF" image="../public/img/netflix.png" category="netflix" value="8:00PM"></GridBox>
-                <GridBox color="#88E6D8" image="../public/img/profile.png" category="profile" value="description of my profile picture doing"></GridBox>
-                <GridBox color="#FFD769" image="../public/img/twitter.png" category="twitter" value="twitter"></GridBox>
-                <GridBox color="#C0F8B2" image="../public/img/insta.png" category="insta" value="instagram"></GridBox>
-                <GridBox color="#A4B0F2" image="../public/img/amazon.png" category="amazon" value="wishlist"></GridBox>
-                <GridBox color="#FFC6C6" image="../public/img/fb.png" category="fb" value="status"></GridBox>
+                <GridBox color="#FBC9FF" image="../public/img/netflix.png" category="netflix" value={netflix ? netflix : ""}></GridBox>
+                <GridBox color="#88E6D8" image="../public/img/profile.png" category="profile" value={profile ? profile : ""}></GridBox>
+                <GridBox color="#FFD769" image="../public/img/twitter.png" category="twitter" value={twitter ? twitter : ""}></GridBox>
+                <GridBox color="#C0F8B2" image="../public/img/insta.png" category="insta" value={insta ? insta : ""}></GridBox>
+                <GridBox color="#A4B0F2" image="../public/img/amazon.png" category="amazon" value={amazon ? amazon : ""}></GridBox>
+                <GridBox color="#FFC6C6" image="../public/img/fb.png" category="fb" value={fb ? fb : ""}></GridBox>
             </div>
         )
     }
@@ -38,6 +57,7 @@ class Gameboard extends React.Component {
 class Playerboard extends React.Component {
     switchBoard(el) {
         console.log(el);
+        this.props.callback(el);
         for (var i = 1; i < 7; i++) {
             document.getElementById(i).style.backgroundColor = "#fff";
             document.getElementById(i).style.fontWeight = "normal";
@@ -234,6 +254,7 @@ class App extends React.Component {
         this.gameStarted = this.gameStarted.bind(this)
         this.updateInputValue = this.updateInputValue.bind(this)
         this.changeGameState = this.changeGameState.bind(this)
+        this.playerboardChanged = this.playerboardChanged.bind(this);
         this.state = {
             netflixVisible: false,
             profileVisible: false,
@@ -245,7 +266,8 @@ class App extends React.Component {
             game_state: {},
             inputValue: "",
             id: null,
-            role: null
+            role: null,
+            player: 1
         }
         socket = openSocket(this.state.endpoint);
     }
@@ -336,6 +358,8 @@ class App extends React.Component {
         console.log(result);
         var id = result.user.id;
         console.log("client id is: " + id);
+        current_id = id;
+        universalGameState = result.gs;
         this.setState({
             role: result.user.role,
             id: result.user.id,
@@ -398,16 +422,24 @@ class App extends React.Component {
         }
     }
 
+    populateData(id) {
+
+    }
+
     changeGameState(result) {
         this.setState({
             game_state: result
         });
         console.log("round finished");
+        universalGameState = result;
         this.selectModal();
     }
 
     submitAnswer(input) {
         console.log("Submit answer", this.state.game_state);
+        this.setState({
+            inputValue: ""
+        })
         socket.emit('move', { "id": this.state.id, "round": this.state.game_state.round, "answer": this.state.inputValue });
     }
 
@@ -425,14 +457,21 @@ class App extends React.Component {
         socket.off();
     }
 
+    playerboardChanged(input_player) {
+        console.log("playerboardChanged", input_player);
+        this.setState({
+            player: input_player
+        })
+    }
+
     render() {
         let { game_state } = this.state.game_state;
         console.log("Game State", this.state.game_state);
         return (
             <div id="largeContainer">
                 <div id="container">
-                    <Gameboard></Gameboard>
-                    <Playerboard></Playerboard>
+                    <Gameboard player={this.state.player}></Gameboard>
+                    <Playerboard callback={this.playerboardChanged}></Playerboard>
                 </div>
                 <div>{game_state}</div>
                 <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
