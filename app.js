@@ -38,7 +38,7 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         console.log("Game Started");
-        start_game();
+        start_game(); // likes are retrieved here
         var uuid = gen_uuid();
         joined_users.uuid = 
             {id: uuid, 
@@ -51,7 +51,7 @@ io.on('connection',function(socket){                  // called when a new socke
         //socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
         
         // push both the game_stat and uuid on server start 
-        retrieve_likes();
+        
         var result = {gs: game_state, user: joined_users.uuid};
 
         socket.emit('game_started', result);        // server server-side emit to all clients
@@ -109,6 +109,7 @@ function start_game(){
         var next_round = unused_rounds[index];
         unused_rounds.splice(index, 1);
         game_state.round = next_round;
+        retrieve_likes();
         game_started = true;
         return next_round;
     }
