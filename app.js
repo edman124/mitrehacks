@@ -37,7 +37,7 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('join_game', function(obj){            // server side socket callbacks for events
         console.log('client message!');
         console.log("Game Started");
-        set_round(game_state.round);
+        start_game();
         var uuid = gen_uuid();
         joined_users.uuid = 
             {id: uuid, 
@@ -99,6 +99,17 @@ function round_finished(){
     io.emit('round_finished', game_state);
 }
 
+function start_game(){
+    if(!game_started){
+        var len = unused_rounds.length;
+        var index = Math.floor(Math.random()*len);
+        var next_round = unused_rounds[index];
+        unused_rounds.splice(index, 1);
+        game_state.round = next_round;
+        game_started = true;
+        return next_round;
+    }
+}
 function set_round(round){
     var len = unused_rounds.length;
     var index = Math.floor(Math.random()*len);
@@ -106,10 +117,6 @@ function set_round(round){
     console.log(unused_rounds);
     unused_rounds.splice(index, 1);
     console.log(unused_rounds);
-    if(!game_started){
-    	round = next_round;
-        game_started = true;
-    }
     game_state.round = round;
     return next_round;
 }
