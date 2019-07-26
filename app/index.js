@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-awesome-modal';
 import openSocket from 'socket.io-client';
-const socket = openSocket('ec2-34-207-123-245.compute-1.amazonaws.com:8080');
 import './index.css';
 
 class GridBox extends React.Component {
@@ -79,7 +78,9 @@ class App extends React.Component {
             twitterVisible: false,
             instaVisible: false,
             amazonVisible: false,
-            fbVisible: false
+            fbVisible: false,
+            endpoint: "localhost:3000",
+            game_state: {}
         }
     }
 
@@ -153,10 +154,27 @@ class App extends React.Component {
             fbVisible: false
         });
     }
-    render() {
-        socket.on('game_started', function (result) {
 
-        });
+    gameStarted(result){
+        console.log("socket: game_started");
+        console.log(result);
+        var id = result.user.id;
+        console.log("client id is: " + id);
+        this.setState({});
+    }
+
+    componentDidMount(){
+        console.log("mounted");
+
+        const socket = openSocket(this.state.endpoint);
+
+        socket.emit('join_game', { keys : 'values'} ); 
+
+        socket.on('game_started', this.gameStarted);
+    }
+
+    render() {
+        let {game_state} = this.state.game_state;
         return (
             <div>
                 <div id="container">
@@ -164,7 +182,7 @@ class App extends React.Component {
                     <Playerboard></Playerboard>
                 </div>
                 <Sidebar></Sidebar>
-                <div></div>
+                <div>{game_state}</div>
                 <input type="button" value="Open" onClick={() => this.openNetflixModal()} />
                 <input type="button" value="Open" onClick={() => this.openProfileModal()} />
                 <input type="button" value="Open" onClick={() => this.openTwitterModal()} />
