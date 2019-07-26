@@ -54,12 +54,83 @@ class Playerboard extends React.Component {
     }
 }
 
+class Sidebar extends React.Component {
+    likeTraits() {
+        let likeList = ['Starbucks', 'CNN', 'Rap', 'Anime', 'Hamburgers']
+        let likeComp = []
+        let rowDiv = []
+        for (var i = 0; i < likeList.length; i++) {
+            rowDiv.push(<div className="trait">{likeList[i]}</div>)
+            if (i % 2 == 1) {
+                likeComp.push(<div className="traitRow">{rowDiv}</div>)
+                rowDiv = []
+            }
+        }
+        if (rowDiv) {
+            // rowDiv.push(<div className="trait"></div>)
+            likeComp.push(<div className="traitRow">{rowDiv}</div>)
+        }
+        return likeComp
+    }
+    // recentActivity() {
+    //     let dislikeList = ['School', 'Work', 'Pop', 'Fox News']
+    //     let dislikeComp = []
+    //     for (var i = 0; i < dislikeList.length; i++) {
+    //         dislikeComp.push(<div className="trait">{dislikeList[i]}</div>)
+    //     }
+    //     return dislikeComp
+    // }
+    render() {
+        return (
+            <div id="sidebarContent">
+                <div className="title">Likes</div>
+                <div id="likesDiv" className="contentDiv">
+                    {this.likeTraits()}
+                </div>
+                <div className="title">Recent Activity</div>
+                <div id="recent" className="contentDiv">
+                    {this.likeTraits()}
+                </div>
+            </div>
+        )
+    }
+}
+
+class Collapsible extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        }
+        this.togglePanel = this.togglePanel.bind(this);
+    }
+    togglePanel(e) {
+        this.setState({ open: !this.state.open })
+    }
+    render() {
+        return (<div>
+            <div onClick={(e) => this.togglePanel(e)} className='sidebar'>
+                {this.props.title}</div>
+            {
+                this.state.open ? (
+                    <div className='content'>
+                        <Sidebar></Sidebar>
+                    </div>
+                ) : null
+            }
+        </div >);
+    }
+}
+
 class App extends React.Component {
     render() {
         return (
             <div id="container">
-                <Gameboard></Gameboard>
-                <Playerboard></Playerboard>
+                <div id="boardContainer">
+                    <Gameboard></Gameboard>
+                    <Playerboard></Playerboard>
+                </div>
+                <Sidebar></Sidebar>
             </div>
         )
     }
