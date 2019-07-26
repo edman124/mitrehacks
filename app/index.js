@@ -154,8 +154,9 @@ class App extends React.Component {
         });
     }
     render() {
-        console.log('cool');
-        var temp = "cool";
+        socket.on('game_started', function (result) {
+
+        });
         return (
             <div>
                 <div id="container">
