@@ -83,7 +83,7 @@ class Playerboard extends React.Component {
 class Sidebar extends React.Component {
     likeTraits(gamestate) {
         let likeList = gamestate
-        if(likeList!==undefined){
+        if (likeList !== undefined) {
             let likeComp = []
             let rowDiv = []
             for (var i = 0; i < likeList.length; i++) {
@@ -572,10 +572,15 @@ class App extends React.Component {
                     </div>
                 </Modal>
                 <div id="slideout">
-                <img src="../public/img/like.png" alt="Likes" />
-                <div id="slideout_inner">
-                    <Sidebar gamestate={this.state.game_state}></Sidebar>
-                </div>
+                    {/* <img src="../public/img/like.png" alt="Likes" /> */}
+                    <div id="out">
+                        <div id="image">
+                            <img id="pic" src="../public/img/output-onlinepngtools.png" alt="Likes" />
+                        </div>
+                    </div>
+                    <div id="slideout_inner">
+                        <Sidebar gamestate={this.state.game_state}></Sidebar>
+                    </div>
                 </div>
             </div>
         )
