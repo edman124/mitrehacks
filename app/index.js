@@ -71,6 +71,7 @@ class Sidebar extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.gameStarted = this.gameStarted.bind(this)
         this.state = {
             netflixVisible: false,
             profileVisible: false,
@@ -83,9 +84,6 @@ class App extends React.Component {
         }
     }
 
-    startGame() {
-
-    }
 
     openNetflixModal() {
         this.setState({
@@ -159,7 +157,9 @@ class App extends React.Component {
         console.log(result);
         var id = result.user.id;
         console.log("client id is: " + id);
-        this.setState({});
+        this.setState({
+            game_state: result.gs
+        });
     }
 
     componentDidMount(){
@@ -172,8 +172,13 @@ class App extends React.Component {
         socket.on('game_started', this.gameStarted);
     }
 
+    componentWillUnmount() {
+        socket.off();
+    }
+
     render() {
         let {game_state} = this.state.game_state;
+        console.log("Game State", this.state.game_state);
         return (
             <div>
                 <div id="container">
