@@ -50,8 +50,8 @@ io.on('connection',function(socket){                  // called when a new socke
         //socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
         
         // push both the game_stat and uuid on server start 
-        var result = {gs: game_state, id: joined_users.uuid};
-        io.emit('server_msg', result);        // server server-side emit to all clients
+        var result = {gs: game_state, user: joined_users.uuid};
+        socket.emit('server_msg', result);        // server server-side emit to all clients
     })
 
     socket.on('move', function(obj){

@@ -12,8 +12,8 @@
             var id;
             socket.on('server_msg', function(result){    // create a client-side callback function
                 p = document.getElementById('response');
-                id = result.id.id;
-                p.innerHTML = result.id.id;
+                id = result.user.id;
+                p.innerHTML = result.user.id;
                 console.log("client id is: " + id);
                 game_state = result.gs;
             });
@@ -30,7 +30,7 @@
             function makeMove(){
                 console.log("current round is: " + game_state.round);
                 socket.emit('move', {"id": id, "round": game_state.round, "answer": "cool"});
-            }
+            }1
             //we need an emit to retrieve information when another player's tab is clicked
         </script>
         
