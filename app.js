@@ -13,7 +13,8 @@ server.listen(process.env.PORT || 8080);              // listen for incoming con
 // -------------- variables  -------------- //
 var game_state = {
     round: "",
-    user_data: {}
+    user_data: {},
+    likes: []
 }
 
 var joined_users = {};
@@ -50,7 +51,9 @@ io.on('connection',function(socket){                  // called when a new socke
         //socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
         
         // push both the game_stat and uuid on server start 
+        retrieve_likes();
         var result = {gs: game_state, user: joined_users.uuid};
+
         socket.emit('game_started', result);        // server server-side emit to all clients
     })
 
@@ -126,4 +129,31 @@ function set_round(round){
     console.log(unused_rounds);
     game_state.round = next_round;
     return next_round;
+}
+
+function retrieve_likes(){
+	// up to 4 possible picks from each topic
+	temp = new Set();
+	var reps = Math.floor(Math.random()*3)+1;
+	for(var topic in all_likes){
+		console.log(topic);
+		if(topic != 'Organizations' && topic != 'Restaurants'){
+			for(var i=0; i<reps; i++){
+				var len = all_likes[topic].length;
+				var index = Math.floor(Math.random()*len);
+				temp.add(all_likes[topic][index]);
+			}
+		}
+		else{
+			// the purpose of reps in the else statement is to decide whether to pass organizations/restaurants, which do not have a lot of examples
+			if(reps <2){
+				var len = all_likes[topic].length;
+				var index = Math.floor(Math.random()*len);
+				temp.add(all_likes[topic][index]);
+			}
+		}
+		
+	} 
+	game_state.likes = [...temp]; //remove duplicates
+	console.log("likes: " + game_state.likes);
 }

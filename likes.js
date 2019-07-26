@@ -194,7 +194,9 @@ module.exports = {
 		"Telegraph",
 		"Times Mag",
 		"PopSci",
-		"People Mag"
+		"People Mag",
+		"NPR",
+		"The Onion"
 	]
 
 }
