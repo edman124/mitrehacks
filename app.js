@@ -27,6 +27,8 @@ var current_id = 1;
 
 var vote_start = false;
 
+var vote_count = 0;
+
 var tally = {};
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
@@ -77,6 +79,7 @@ io.on('connection',function(socket){                  // called when a new socke
     })
 
     socket.on('vote', function(obj){
+        vote_count+=1
         if(!vote_start){
             for(var userid in game_state.user_data){
                 tally.push({key: userid, value: 0});
@@ -84,6 +87,10 @@ io.on('connection',function(socket){                  // called when a new socke
             vote_start = true;
         }
         vote(obj.id);
+        if(check_vote_finished()){
+            end_game()
+        }
+
     })
 
 })
@@ -183,5 +190,14 @@ function vote(id){
     tally.id+=1;
 }
 function check_vote_finished(){
-    var size = 1;
+    var size = Object.keys(game_state.user_data).length;
+    var over = false;
+    if(size == vote_count){
+        over = true;
+    }
+    return over;
+}
+
+function end_game(){
+    var a = 1; 
 }
