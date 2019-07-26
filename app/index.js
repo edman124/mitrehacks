@@ -253,12 +253,15 @@ class Content extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.voteClicked = this.voteClicked.bind(this)
         this.gameStarted = this.gameStarted.bind(this)
         this.updateInputValue = this.updateInputValue.bind(this)
         this.changeGameState = this.changeGameState.bind(this)
         this.playerboardChanged = this.playerboardChanged.bind(this);
+        this.game_finished = this.game_finished.bind(this);
         this.state = {
             voteVisible: false,
+            finishVisible: false,
             netflixVisible: false,
             profileVisible: false,
             twitterVisible: false,
@@ -361,6 +364,12 @@ class App extends React.Component {
         });
     }
 
+    openFinishModal() {
+        this.setState({
+            finishVisible: true
+        });
+    }
+
     updateInputValue(evt) {
         this.setState({
             inputValue: evt.target.value
@@ -419,6 +428,20 @@ class App extends React.Component {
         universalGameState = result;
         this.selectModal();
     }
+    game_finished(data){
+        console.log(data);
+        this.openFinishModal(); //DATA IS HERE ANDREW
+    }
+
+    changeGameState(result) {
+        this.setState({
+            game_state: result
+        });
+        console.log("round finished");
+        universalGameState = result;
+        this.selectModal();
+    }
+
 
     submitAnswer(input) {
         console.log("Submit answer", this.state.game_state);
@@ -436,6 +459,8 @@ class App extends React.Component {
         socket.on('game_started', this.gameStarted);
 
         socket.on('round_finished', this.changeGameState);
+
+        socket.on('game_finished', this.game_finished);  //LOOK HERE ANDREW
     }
 
     componentWillUnmount() {
@@ -452,7 +477,7 @@ class App extends React.Component {
     voteClicked(vote){
         console.log(vote);
         socket.emit('vote', vote);
-        closeVoteModal();
+        this.closeVoteModal();
     }
 
     render() {
@@ -481,6 +506,11 @@ class App extends React.Component {
                     <div className="modal">
                         <h1>Who is the catfish?</h1>
                         <ul>{players}</ul>
+                    </div>
+                </Modal>
+                <Modal visible={this.state.finishVisible} width="400" height="200" display="flex" effect="fadeInUp">
+                    <div className="modal">
+                        <h1>Game Over</h1>
                     </div>
                 </Modal>
                 <Modal visible={this.state.netflixVisible} width="400" height="200" display="flex" effect="fadeInUp">

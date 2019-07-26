@@ -81,14 +81,16 @@ io.on('connection',function(socket){                  // called when a new socke
     socket.on('vote', function(obj){
         vote_count+=1
         if(!vote_start){
-            for(var userid in game_state.user_data){
-                tally.push({key: userid, value: 0});
+            for(var userid in Object.keys(game_state.user_data)){
+                tally[userid] = 0;
             }
             vote_start = true;
         }
-        vote(obj.id);
+        vote(obj);
+        console.log(tally);
         if(check_vote_finished()){
-            end_game()
+            console.log("finished");
+            end_game();
         }
 
     })
@@ -190,7 +192,7 @@ function retrieve_likes(){
 	console.log("likes: " + game_state.likes);
 }
 function vote(id){
-    tally.id+=1;
+    tally.userid+=1;
 }
 function check_vote_finished(){
     var size = Object.keys(game_state.user_data).length;
@@ -217,4 +219,5 @@ function end_game(){
     		spy = uuid
     	}
     }
+    io.emit('game_finished', game_state); //to add delay, comment this line, uncomment above
 }
