@@ -82,7 +82,7 @@ class Playerboard extends React.Component {
 
 class Sidebar extends React.Component {
     likeTraits() {
-        let likeList = ['Starbucks', 'CNN', 'Rap', 'Anime', 'Hamburgers']
+        let likeList = this.props.gamestate
         let likeComp = []
         let rowDiv = []
         for (var i = 0; i < likeList.length; i++) {
@@ -113,10 +113,10 @@ class Sidebar extends React.Component {
                 <div id="likesDiv" className="contentDiv">
                     {this.likeTraits()}
                 </div>
-                <div className="title">Recent Activity</div>
+                {/* <div className="title">Recent Activity</div>
                 <div id="recent" className="contentDiv">
                     {this.likeTraits()}
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -522,7 +522,7 @@ class App extends React.Component {
                         <a href="javascript:void(0);" onClick={() => this.closeFbModal()}>Submit</a>
                     </div>
                 </Modal>
-                <Sidebar></Sidebar>
+                <Sidebar gamestate={this.state.game_state}></Sidebar>
             </div>
         )
     }
