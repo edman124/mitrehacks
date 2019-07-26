@@ -1,4 +1,4 @@
-module.exports = [
+module.exports = {
 	"Reading": [
 		"On the Road",
 		"Pride and Prejudice",
@@ -87,13 +87,13 @@ module.exports = [
 		"Nasa"
 
 	],
-	"Organizations":
+	"Organizations": [
 		"Boy Scouts",
 		"Girl Scouts",
 		"Church of Latter Day Saints",
 		"Salvation Army",
-		"Archdiocese of Boston",
-
+		"Archdiocese of Boston"
+	],
 	"Restaurants": [
 		"Applebees",
 		"Five Guys",
@@ -137,7 +137,12 @@ module.exports = [
 		"Friends",
 		"The Office",
 		"The Big Bang Theory",
-		"Roseanne"
+		"Roseanne",
+		"House",
+		"Doctor Who",
+		"Sherlock",
+		"Frasier",
+		"Fresh Prince of Bel-Air"
 	],
 	"Fitness": [
 		"US Women's Soccer",
@@ -192,4 +197,4 @@ module.exports = [
 		"People Mag"
 	]
 
-]
+}

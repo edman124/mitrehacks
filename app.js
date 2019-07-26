@@ -5,7 +5,7 @@ var express = require('express');                     // import express
 var app = express();                                  // create an app from express
 var server =  require('http').createServer(app);      // import http and create a server
 var io = require('socket.io').listen(server);         // attach socket.io to the server
-
+var all_likes = require('./likes.js');
 
 // PORT SETUP - NUMBER SPECIFIC TO THIS SYSTEM
 server.listen(process.env.PORT || 8080);              // listen for incoming connections
