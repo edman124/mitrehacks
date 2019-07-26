@@ -202,5 +202,19 @@ function check_vote_finished(){
 }
 
 function end_game(){
-    var a = 1; 
+	var max_key = "";
+	var max = 0;
+    for(var id in tally){
+    	var total = tally[id];
+    	if(total > max){
+    		max = total;
+    		max_key = id;
+    	}
+    }
+    var spy = ""
+    for (var uuid in joined_users){
+    	if(uuid.role == "catfish"){
+    		spy = uuid
+    	}
+    }
 }
