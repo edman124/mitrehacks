@@ -20,6 +20,8 @@ var joined_users = {};
 
 var unused_rounds = ["avatar", "twitter", "netflix", "amazon", "fb", "instagram"];
 
+var game_started = false;
+
 //avatar, twitter handle, day of time of netflix, whats on amazon wishlist, fb status, followed instagram account
 
 // -------------- express getter -------------- //
@@ -46,6 +48,7 @@ io.on('connection',function(socket){                  // called when a new socke
         game_state["user_data"][uuid] = {};
         console.log("Init Game State",game_state);
         socket.emit('server_msg', joined_users.uuid); // server-side emit just to this client
+        
 
         
         //io.emit('server_msg', button_count++);        // server server-side emit to all clients
@@ -58,7 +61,7 @@ io.on('connection',function(socket){                  // called when a new socke
         console.log("post move game state", game_state);
         console.log("check round finished", check_round_finished(game_state.round))
         if(check_round_finished(game_state.round)){
-            set_round(game_state.round);
+            round_finished();
         }
 
     })
@@ -92,8 +95,7 @@ function check_round_finished(round){
 }
 
 function round_finished(){
-    prev_round.push(game_state.round);
-    set_round();
+    set_round(game_state.round);
     io.emit('round_finished', game_state);
 }
 
@@ -101,9 +103,12 @@ function set_round(round){
     var len = unused_rounds.length;
     var index = Math.floor(Math.random()*len);
     var next_round = unused_rounds[index];
+    console.log(unused_rounds);
     unused_rounds.splice(index, 1);
-    if(typeof round === "undefined"){
+    console.log(unused_rounds);
+    if(!game_started){
     	round = next_round;
+        game_started = true;
     }
     game_state.round = round;
     return next_round;
